@@ -1,0 +1,41 @@
+<div id="project-detail-container" class="overflow-y-scroll">
+    <div *ngIf="loading" class="flex gap-6 py-12 px-4 sm:px-16 flex-wrap justify-evenly">
+        <div class="radial-progress animate-spin" style="--value:60;"></div>
+    </div>
+
+    <div *ngIf="!loading && project" id="project-detail" class="flex flex-col pt-8 px-6 xs:px-16">
+        <div id="project-header" class="flex justify-between flex-wrap">
+            <h2 class="font-bold text-4xl">
+                <button class="btn h-8 w-8 p-0 min-h-0" (click)="openEditProjectModal()">
+                    <svg class="h-6 w-6" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M9 16C9 12.134 12.134 9 16 9H42C43.6569 9 45 10.3431 45 12C45 13.6569 43.6569 15 42 15H16C15.4477 15 15 15.4477 15 16V42C15 43.6569 13.6569 45 12 45C10.3431 45 9 43.6569 9 42V16ZM68 33.9117C69.6569 33.9117 71 35.2549 71 36.9117V64C71 67.866 67.866 71 64 71H36.9117C35.2549 71 33.9117 69.6569 33.9117 68C33.9117 66.3431 35.2549 65 36.9117 65H64C64.5523 65 65 64.5523 65 64V36.9117C65 35.2549 66.3431 33.9117 68 33.9117ZM68.4001 23.139C69.9605 21.5786 69.9605 19.0488 68.4001 17.4884L62.7433 11.8315C61.1795 10.2677 58.644 10.2677 57.0802 11.8315L18.0554 50.8563C16.7709 52.1408 15.9618 53.8242 15.7612 55.6297L14.7983 64.2957C14.7258 64.9483 15.2772 65.4996 15.9297 65.4271L24.5957 64.4642C26.4012 64.2636 28.0846 63.4545 29.3691 62.17L68.4001 23.139ZM58.4968 33.0409L47.1893 21.7334L50.0178 18.905L61.3253 30.2125L58.4968 33.0409Z"
+                            fill="currentColor" />
+                    </svg>
+                </button>
+                {{ project.name }}
+            </h2>
+        </div>
+        <span *ngIf="project.completed" class="badge mt-4 py-3 gap-1">
+            Proyecto completado
+            <svg class="w-6 h-6 text-success"
+                viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                    fill="currentColor" />
+            </svg>
+        </span>
+        <div class="divider my-2"></div>
+        <div id="project-description" class="flex flex-col justify-between gap-4 md:flex-row">
+            <p class="font-normal whitespace-pre-wrap text-lg max-w-xl">{{ project.description }}</p>
+            <app-project-members-list [membersList]="membersList" [project]="project"
+                [projectTasksList]="projectTasksList"></app-project-members-list>
+        </div>
+    </div>
+
+    <app-project-tasks-list *ngIf="!loading && project" [project]="project" [projectTasksList]="projectTasksList"
+        [projectTasks]="projectTasks"></app-project-tasks-list>
+</div>
+
+<app-edit-project-modal *ngIf="showEditProjectModal" [project]="project" (closeModal)="onCloseEditProjectModal($event)">
+</app-edit-project-modal>

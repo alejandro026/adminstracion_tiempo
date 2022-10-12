@@ -1,0 +1,48 @@
+<div *ngIf="!loading" class="modal-box relative">
+    <label class="btn btn-sm btn-circle absolute right-2 top-2" (click)="close()">✕</label>
+    <form [formGroup]="formEditTask">
+        <div class="form-control w-full ">
+            <label class="label">
+                <span class="label-text font-bold">Nombre</span>
+            </label>
+            <input formControlName="name" [ngClass]="{'invalid': nameFormControl?.invalid && nameFormControl?.dirty}"
+                type="text" placeholder="Nombre de la tarea..." class="input input-bordered input-sm w-full">
+            <label *ngIf="nameFormControl?.invalid && nameFormControl?.dirty" class="label">
+                <span class="label-text-alt"
+                    [ngClass]="{'invalid': nameFormControl?.invalid && nameFormControl?.dirty}">El nombre es
+                    requerido</span>
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text font-bold">Descripcion</span>
+            </label>
+            <textarea formControlName="description" class="textarea textarea-bordered h-24 max-h-24"
+                placeholder="Descripcion de la tarea..."></textarea>
+        </div>
+        <div class="form-control w-full max-w-xs">
+            <label class="label">
+                <span class="label-text font-bold">Prioridad</span>
+            </label>
+            <select formControlName="priority" [ngClass]="{'invalid': priorityFormControl?.invalid}"
+                class="select select-sm select-bordered">
+                <option *ngFor="let option of priorityOptions" [ngValue]="option.value">{{ option.text }}</option>
+            </select>
+        </div>
+        <div class="form-control flex-row gap-2 items-center pt-3">
+            <label class="label cursor-pointer">
+                <span class="label-text font-bold">Completada</span>
+            </label>
+            <input formControlName="completed" type="checkbox" class="toggle toggle-accent toggle-sm">
+        </div>
+    </form>
+    <div class="modal-action">
+        <button class="btn btn-primary btn-sm" (click)="close()">Cancelar</button>
+        <button class="btn btn-secondary btn-sm" [disabled]="formEditTask.invalid"
+            (click)="saveTaskChanges()">Guardar</button>
+    </div>
+</div>
+
+<div *ngIf="loading" class="modal-box flex gap-6 py-12 px-4 sm:px-16 flex-wrap justify-evenly">
+    <div class="radial-progress animate-spin" style="--value:60;"></div>
+</div>

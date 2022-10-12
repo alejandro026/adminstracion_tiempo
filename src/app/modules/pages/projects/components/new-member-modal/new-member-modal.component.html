@@ -1,0 +1,20 @@
+<div class="modal-box relative">
+    <label class="btn btn-sm btn-circle absolute right-2 top-2" (click)="close()">✕</label>
+    <form [formGroup]="formNewMember">
+        <div class="form-control w-full ">
+            <label class="label">
+                <span class="label-text font-bold">Miembro</span>
+            </label>
+            <input formControlName="member" [ngClass]="{'invalid': formMemberControl.invalid && formMemberControl.dirty}" type="text" placeholder="Correo del miembro..." class="input input-bordered input-sm w-full">
+            <label *ngIf="formMemberControl.invalid && formMemberControl.dirty" class="label">
+                <span class="label-text-alt invalid" *ngIf="formMemberControl.errors?.['required'] || formMemberControl.errors?.['empty']">El campo es requerido</span>
+                <span class="label-text-alt invalid" *ngIf="formMemberControl.errors?.['pattern']">Debe ser un correo valido</span>
+                <span class="label-text-alt invalid" *ngIf="formMemberControl.errors?.['memberExist']">El miembro ya existe</span>
+            </label>
+        </div>
+    </form>
+    <div class="modal-action">
+        <button class="btn btn-primary btn-sm" (click)="close()">Cancelar</button>
+        <button class="btn btn-secondary btn-sm" [disabled]="formNewMember.invalid" (click)="saveMember()">Guardar</button>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+#project-detail-member-container {
+    height: calc(100vh - 4rem);
+}
+
+.table th:first-child {
+    z-index: 1;
+    position: relative;
+}

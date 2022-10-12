@@ -1,0 +1,49 @@
+<h3 class="text-xl font-bold">Miembros</h3>
+<div class="flex gap-2 py-2 w-fit">
+    <button class="btn btn-error btn-sm shadow" [disabled]="memberActionButtonsState.disabledDelete"
+        (click)="deleteMembers()">Eliminar</button>
+    <button class="btn btn-info btn-sm shadow" [disabled]="memberActionButtonsState.disabledEdit"
+        (click)="openEditMemberModal()">Editar</button>
+    <button class="btn btn-success btn-sm shadow" [disabled]="memberActionButtonsState.disabledNew"
+        (click)="openNewMemberModal()">Nuevo</button>
+</div>
+<div class="overflow-x-auto w-full shadow rounded-lg">
+    <table id="members-table" class="table w-full">
+        <thead>
+            <tr>
+                <th class="bg-base-300">
+                    <label>
+                        <input [(ngModel)]="generalMembersCheckValue" type="checkbox" class="checkbox"
+                            (ngModelChange)="onGeneralMembersCheckChange($event)" />
+                    </label>
+                </th>
+                <th class="bg-base-300">Miembro</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="membersList.length > 0">
+            <tr *ngFor="let item of membersList; let i=index">
+                <th class="py-2">
+                    <label>
+                        <input [(ngModel)]="item.selected" type="checkbox" class="checkbox"
+                            (ngModelChange)="onMemberCheckChange()" />
+                    </label>
+                </th>
+                <td class="py-2">
+                    <span>{{ item.member }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="membersList.length === 0" class="flex py-4 justify-center items-center w-full">
+    <div class="flex bg-base-100 shadow p-4 items-center justify-center w-full lg:w-9/12 rounded-lg">
+        <span class="text-base-content text-center text-lg font-bold">No se encontraron miembros</span>
+    </div>
+</div>
+
+<app-new-member-modal *ngIf="showNewMemberModal && project" [members]="project.members"
+    (closeModal)="onCloseNewMemberModal($event)"></app-new-member-modal>
+<app-edit-member-modal *ngIf="showEditMemberModal && project" [members]="project.members" [member]="editMemberSelected"
+    (closeModal)="onCloseEditMemberModal($event)"></app-edit-member-modal>
+<app-confirm-modal *ngIf="showConfirmModalDeleteMembers" [message]="confirmModalMessage"
+    (closeModal)="onCloseDeleteMembersConfirmModal($event)"></app-confirm-modal>

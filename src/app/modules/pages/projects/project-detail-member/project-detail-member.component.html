@@ -1,0 +1,162 @@
+<div id="project-detail-member-container" class="overflow-y-scroll">
+    <div *ngIf="loading" class="flex gap-6 py-12 px-4 sm:px-16 flex-wrap justify-evenly">
+        <div class="radial-progress animate-spin" style="--value:60;"></div>
+    </div>
+
+    <div *ngIf="!loading && project" id="project-detail" class="flex flex-col pt-8 px-6 xs:px-16">
+        <div id="project-header" class="flex flex-col">
+            <h2 class="font-bold text-4xl">{{ project.name }}</h2>
+            <div class="pt-2">
+                <span class="text-sm text-gray-400">
+                    Creado el
+                    <span class="text-sm">{{ project.creation_date.toDate() | date: 'longDate': 'es-GT'}}</span>
+                    por <span class="font-bold text-sm">{{ ' ' + project.owner }}</span>
+                </span><br>
+            </div>
+        </div>
+        <span *ngIf="project.completed" class="badge mt-4 py-3 gap-1">
+            Proyecto completado
+            <svg class="w-6 h-6 text-success"
+                viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                    fill="currentColor" />
+            </svg>
+        </span>
+        <div class="divider my-2"></div>
+        <div id="project-description" class="flex flex-col justify-between gap-4 md:flex-row">
+            <p class="text-lg max-w-xl">
+                {{ project.description }}<br>
+            </p>
+            <div class="flex flex-col gap-2 w-full md:max-w-sm">
+                <h3 class="text-xl font-bold">Miembros</h3>
+                <div class="overflow-x-auto w-full shadow rounded-lg">
+                    <table id="members-table" class="table w-full">
+                        <thead>
+                            <tr>
+                                <th class="bg-base-300 text-center">Miembro</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="membersList.length > 0">
+                            <tr *ngFor="let item of membersList; let i=index">
+                                <td class="py-2 text-center">
+                                    <span>{{ item.member }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="membersList.length === 0" class="flex py-4 justify-center items-center w-full">
+                    <div
+                        class="flex bg-base-100 p-4 items-center justify-center shadow w-full md:w-96 xl:w-6/12 rounded-lg">
+                        <span class="text-base-content text-lg font-bold">No se encontraron miembros</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && project" id="project-tasks" class="flex flex-col pt-10 pb-8 px-6 xs:px-16">
+        <h3 class="font-bold text-2xl">Tareas del proyecto</h3>
+
+        <div class="divider mt-2 mb-6"></div>
+
+        <div class="sm:px-8 lg:px-16">
+            <div class="overflow-x-auto w-full shadow rounded-lg">
+                <table id="tasks-table" class="table w-full">
+                    <thead>
+                        <tr>
+                            <th class="bg-base-300">Completada</th>
+                            <th class="bg-base-300">Nombre</th>
+                            <th class="bg-base-300">Descripcion</th>
+                            <th class="bg-base-300">Prioridad</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="projectTasksList.length > 0">
+                        <tr *ngFor="let item of projectTasksList">
+                            <td *ngIf="project.completed">
+                                <div class="flex justify-center">
+                                    <svg class="w-8 h-8"
+                                        [ngClass]="{'text-gray-300': !item.task.completed, 'text-success': item.task.completed}"
+                                        viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                            </td>
+                            <td *ngIf="!project.completed">
+                                <div *ngIf="item.task.owner === null; else ownerExists">
+                                    <div class="flex justify-center">
+                                        <svg class="w-8 h-8"
+                                            [ngClass]="{'text-gray-300': !item.task.completed, 'text-success': item.task.completed}"
+                                            viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <ng-template #ownerExists>
+                                    <div *ngIf="user | async as user" class="text-center">
+                                        <div *ngIf="user?.email === item.task.owner">
+                                            <button #completeBtn *ngIf="!item.task.completed"
+                                                class="btn btn-xs btn-primary" (click)="completeProjectTask(item.task, true, completeBtn)">
+                                                Completar
+                                            </button>
+                                            <div *ngIf="item.task.completed" class="flex justify-center">
+                                                <svg class="w-8 h-8 text-success" viewBox="0 0 80 80" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="user?.email !== item.task.owner"
+                                            class="flex justify-center">
+                                            <svg class="w-8 h-8" [ngClass]="{'text-gray-300': !item.task.completed, 'text-success': item.task.completed}" viewBox="0 0 80 80" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68ZM56.8805 32.3737C58.0465 31.1966 58.0465 29.2882 56.8805 28.1111C55.7145 26.934 53.824 26.934 52.6579 28.1111L35.0769 45.8588L27.342 38.0506C26.176 36.8735 24.2855 36.8735 23.1195 38.0506C21.9534 39.2277 21.9534 41.1361 23.1195 42.3132L31.5581 50.8318C33.5015 52.7937 36.6523 52.7937 38.5957 50.8318L56.8805 32.3737Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <div class="flex items-center space-x-3">
+                                    <div>
+                                        <div class="font-bold">{{ item.task.name }}</div>
+                                        <div class="text-sm opacity-50">{{ item.task.owner === null ? 'Sin encargardo' :
+                                            item.task.owner }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="w-80 md:w-auto">
+                                    <p class="whitespace-normal">
+                                        {{ item.task.description }}
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="getPriorityBageColor(item.task.priority)">
+                                    {{ getPriorityText(item.task.priority) }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="projectTasksList.length === 0" class="flex py-4 justify-center items-center w-full">
+                <div
+                    class="flex bg-base-100 p-4 items-center justify-center w-full md:w-96 xl:w-6/12 rounded-lg shadow">
+                    <span class="text-base-content text-lg font-bold">No se encontraron tareas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

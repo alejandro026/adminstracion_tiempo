@@ -1,0 +1,68 @@
+<div class="w-11/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-96 flex flex-col items-center">
+    <h2 class="text-4xl font-bold text-center">Nuevo proyecto</h2>
+    <form [formGroup]="newProjectForm" class="w-full py-4">
+        <div class="form-control w-full">
+            <label class="label">
+                <span class="label-text font-bold">Nombre</span>
+            </label>
+            <input formControlName="name" [ngClass]="{'invalid': nameFormControl?.invalid && nameFormControl?.dirty}"
+                type="text" placeholder="Nombre del proyecto..." class="input input-sm input-bordered w-full" />
+            <label *ngIf="nameFormControl?.invalid && nameFormControl?.dirty" class="label">
+                <span class="label-text-alt"
+                    [ngClass]="{'invalid': nameFormControl?.invalid && nameFormControl?.dirty}">El nombre es
+                    requerido</span>
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text font-bold">Descripcion</span>
+            </label>
+            <textarea formControlName="description" class="textarea textarea-bordered h-24 max-h-28" [ngClass]="{'invalid': descriptionFormControl?.invalid && descriptionFormControl?.dirty}"
+                style="line-height: 1.35em;" placeholder="Describe tu proyecto..."></textarea>
+            <label *ngIf="descriptionFormControl?.invalid && descriptionFormControl?.dirty" class="label">
+                <span class="label-text-alt"
+                    [ngClass]="{'invalid': descriptionFormControl?.invalid && descriptionFormControl?.dirty}">La descripcion es
+                    requerido</span>
+            </label>
+        </div>
+    </form>
+
+    <form [formGroup]="membersProjectForm" class="w-full" (ngSubmit)="addMember()">
+        <div class="form-control w-full">
+            <label for="" class="label">
+                <span class="label-text font-bold">Miembros</span>
+            </label>
+            <div class="flex gap-2">
+                <input formControlName="member"
+                    [ngClass]="{'invalid': membersProjectForm?.invalid && membersProjectForm?.dirty}" type="text"
+                    placeholder="Correo del miembro..." class="input input-sm input-bordered w-full" />
+                <button class="btn btn-primary btn-sm" type="submit">+</button>
+            </div>
+            <label *ngIf="membersProjectForm?.invalid && membersProjectForm?.dirty" class="label">
+                <span *ngIf="membersProjectForm.get('member')?.errors?.['pattern']" class="label-text-alt invalid">Debe ser un correo valido</span>
+                <span *ngIf="membersProjectForm.get('member')?.errors?.['memberExist']" class="label-text-alt invalid">El miembro ya fue agregado</span>
+            </label>
+        </div>
+    </form>
+    <div *ngIf="members.length !== 0"
+        class="flex flex-wrap gap-4 w-full p-2 py-4 justify-evenly rounded-lg border-opacity-20 border border-base-content bg-base-100 mt-4">
+        <div *ngFor="let member of members; let i=index" class="badge badge-accent gap-2 font-bold py-4">
+            {{ member }}
+            <button class="btn btn-xs btn-circle" (click)="removeMember(i)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    class="inline-block w-4 h-4 stroke-current">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="members.length === 0"
+        class="flex justify-center w-full px-4 py-6 rounded-lg border-opacity-20 border border-base-content bg-base-100 mt-4">
+        <span class="text-base-content">No hay miembros agregados</span>
+    </div>
+    <div class="flex p-4 pt-8 gap-4 flex-wrap justify-center">
+        <button class="btn btn-sm btn-primary" (click)="cancel()">Cancelar</button>
+        <button class="btn btn-sm btn-secondary" (click)="saveProject()">Guardar proyecto</button>
+    </div>
+</div>

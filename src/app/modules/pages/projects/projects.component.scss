@@ -1,0 +1,5 @@
+:host(#projects-page-container) {
+    height: calc(100vh - 4rem);
+    display: block;
+    overflow-y: scroll;
+}

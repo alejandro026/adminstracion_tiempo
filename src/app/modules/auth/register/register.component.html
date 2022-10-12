@@ -1,0 +1,52 @@
+<div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col w-11/12 md:w-96 gap-12 px-0">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold px-4">Registro</h1>
+        </div>
+        <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div class="card-body py-8 px-4 sm:px-8">
+                <form [formGroup]="registerForm">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Correo</span>
+                        </label>
+                        <input #emailInput formControlName="email" [ngClass]="{ 'invalid': emailControl.invalid && emailControl.dirty }" type="text"
+                            placeholder="Ingresa tu correo..." class="input input-bordered">
+                        <label *ngIf="emailControl.invalid && emailControl.dirty" class="label">
+                            <span class="label-text-alt invalid" *ngIf="emailControl.errors?.['required'] || emailControl.errors?.['empty']">El correo es requerido</span>
+                            <span class="label-text-alt invalid" *ngIf="emailControl.errors?.['pattern'] && !emailControl.errors?.['required'] && !emailControl.errors?.['empty']">Debe ser un correo valido</span>
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Contraseña</span>
+                        </label>
+                        <input #passwordInput formControlName="password" [ngClass]="{ 'invalid': passwordControl.invalid && passwordControl.dirty }"
+                            type="password" placeholder="Ingresa tu contraseña.." class="input input-bordered">
+                        <label *ngIf="passwordControl.invalid && passwordControl.dirty" class="label">
+                            <span class="label-text-alt invalid" *ngIf="passwordControl.errors?.['required']">La contraseña es requerida</span>
+                            <span class="label-text-alt invalid" *ngIf="passwordControl.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+                        </label>
+                    </div>
+                    <div class="form-control mt-6">
+                        <button (click)="register()" [disabled]="disableRegisterButton" type="submit"
+                            class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+                <div class="pt-3">
+                    <span class="text-sm text-slate-500">Ya tienes una cuenta? <a [routerLink]="['/auth', 'login']" class="link link-secondary">Inicia sesion</a></span>
+                </div>
+                <div *ngIf="failedRegister" class="alert alert-error">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
+                            fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{{failedRegisterMessage}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
