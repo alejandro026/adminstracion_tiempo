@@ -94,6 +94,8 @@ export class TasksComponent implements OnInit {
         this.disableNextButton = false;
         this.tasksService.getTasks(this.filterOptionSelected.value, this.sortOptionSelected.value, this.limitTasks).pipe(take(1)).subscribe({
             next: (tasks) => {
+                console.log(tasks);
+
                 this.tasksList = tasks.map(t => ({ loading: false, task: t }));
                 this.disablePrevButton = true;
                 this.disableNextButton = tasks.length < this.limitTasks;
