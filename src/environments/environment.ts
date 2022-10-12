@@ -5,12 +5,12 @@
 export const environment = {
     production: false,
     firebase: {
-        apiKey: 'AIzaSyBeQNfS-F6npV3Fx-Fw2MBs89AEf545C1k',
-        authDomain: 'collab-todo-app-672f3.firebaseapp.com',
-        projectId: 'collab-todo-app-672f3',
-        storageBucket: 'collab-todo-app-672f3.appspot.com',
-        messagingSenderId: '345537814529',
-        appId: '1:345537814529:web:8a81f42b38c35eeea8e000'
+        apiKey: 'AIzaSyCJ0G_4Y8fRsjCAYmjCVbRa0MnTsBhhPc8',
+        authDomain: 'administarcion-del-tiempo.firebaseapp.com',
+        projectId: 'administarcion-del-tiempo',
+        storageBucket: 'administarcion-del-tiempo.appspot.com',
+        messagingSenderId: '806771470636',
+        appId: '1:806771470636:web:15ce764a3c16d1e4dabc89'
     }
 };
 
